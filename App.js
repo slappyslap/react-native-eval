@@ -1,72 +1,29 @@
-import { StatusBar } from 'expo-status-bar';
-import {Button, StyleSheet, Text, View, TextInput, SafeAreaView, FlatList} from 'react-native';
-import {useEffect, useState} from "react";
-import TheSimsonApi from "./src/service/TheSimsonApi";
-import QuotesCard from "./src/Components/QuotesCard";
+import {NavigationContainer} from "@react-navigation/native";
+import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
+import FindByName from "./src/view/FindByName";
+import Alea from "./src/view/Alea";
 
 export default function App() {
 
-  const [items, setItems] = useState([]);
-  const [name, setName] = useState("");
-
-  const load = (_text) => {
-    setItems([])
-    TheSimsonApi.getRandomQuotesByName(_text).then((data) => {
-      setItems(data);
-    })
-  }
-  useEffect(() => {
-   load(name);
-  }, [])
+  const Tabs = createBottomTabNavigator();
 
   return (
-    <View style={styles.container}>
-      <FlatList data={items}
-                keyExtractor={(item, index) => Math.random().toString() }
-                renderItem={({item, index}) => {
-                  return (<QuotesCard img={item.image} name={item.character} quote={item.quote}/>)
-                }}>
-      </FlatList>
-      <SafeAreaView style={styles.btnContainer}>
-        <TextInput
-            style={styles.input}
-            onChangeText={(text) => {setName(text)}}
-            value={name}
-            placeholder="Nom"
-            placeholderTextColor="#FFF"
-        />
-        <Button
-            onPress={() => {load(name)}}
-            title="Recherche"
-            style={styles.button}
-        />
-      </SafeAreaView>
-
-    </View>
+      <NavigationContainer>
+        <Tabs.Navigator screenOptions={{headerShown: false, tabBarStyle: {backgroundColor: '#2b2432'}}}>
+          <Tabs.Screen name="home" component={Alea} options={{
+            tabBarLabel: "Aléatoire",
+            tabBarIcon: ({color, size}) => (
+                <MaterialCommunityIcons name="view-list" color={color} size={size}/>
+            ),
+          }}/>
+          <Tabs.Screen name="findByName" component={FindByName} options={{
+            tabBarLabel: "Recherche",
+            tabBarIcon: ({color, size}) => (
+                <MaterialCommunityIcons name="heart" color={color} size={size}/>
+            ),
+          }}/>
+        </Tabs.Navigator>
+      </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#282222',
-    paddingVertical: 30,
-    paddingBottom: 20,
-    paddingHorizontal: 20
-  },
-  btnContainer: {
-    height: 30,
-    flexDirection: "row",
-    marginTop: 40,
-    justifyContent: "center"
-  },
-  button: {
-    backgroundColor: "#3498db",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#3498db",
-    color: "#FFF",
-    paddingHorizontal: 10,
-  },
-});

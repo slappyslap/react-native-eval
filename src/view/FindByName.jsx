@@ -4,15 +4,26 @@ import {useEffect, useState} from "react";
 import TheSimsonApi from "../service/TheSimsonApi";
 import QuotesCard from "../Components/QuotesCard";
 
-export default function FindByName() {
+export default function FindByName({navigation, route}) {
 
     const [items, setItems] = useState([]);
     const [name, setName] = useState("");
 
-    const load = (_text) => {
-        setItems([])
+    useEffect(() => {
+        setName(route.params.search)
+
+        if(route.params.search !== 0) {
+            load(route.params.search, false)
+        }
+    },[route.params?.search])
+
+    const load = (_text, append = true) => {
         TheSimsonApi.getRandomQuotesByName(_text).then((data) => {
-            setItems(data);
+            if(append){
+                setItems([...items,...data]);
+            } else {
+                setItems([...data]);
+            }
         })
     }
 
@@ -22,8 +33,9 @@ export default function FindByName() {
                 {items.length !== 0 ?
                     <FlatList data={items}
                               keyExtractor={(item, index) => Math.random().toString() }
+                              onEndReached={() => load(name)}
                               renderItem={({item, index}) => {
-                                  return (<QuotesCard img={item.image} name={item.character} quote={item.quote}/>)
+                                  return (<QuotesCard img={item.image} name={item.character} quote={item.quote} navigation={navigation}/>)
                               }}>
                     </FlatList>
                     :

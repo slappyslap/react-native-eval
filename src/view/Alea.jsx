@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import TheSimsonApi from "../service/TheSimsonApi";
 import QuotesCard from "../Components/QuotesCard";
 
-export default function Alea() {
+export default function Alea({navigation}) {
 
     const [items, setItems] = useState([]);
 
@@ -23,7 +23,7 @@ export default function Alea() {
                       keyExtractor={(item, index) => Math.random().toString() }
                       onEndReached={() => load(10)}
                       renderItem={({item, index}) => {
-                          return (<QuotesCard img={item.image} name={item.character} quote={item.quote}/>)
+                          return (<QuotesCard img={item.image} name={item.character} quote={item.quote} navigation={navigation}/>)
                       }}>
             </FlatList>
         </View>

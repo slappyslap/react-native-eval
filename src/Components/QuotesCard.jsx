@@ -1,9 +1,9 @@
-import {Image, StyleSheet, Text, View} from "react-native";
+import {Image, StyleSheet, Text, View, TouchableOpacity} from "react-native";
 
-const QuotesCard = ({img, quote, name}) => {
+const QuotesCard = ({img, quote, name, navigation}) => {
 
     return (
-        <View style={styles.container}>
+        <TouchableOpacity style={styles.container} onPress={() => navigation.navigate({name: 'findByName', params: {search: name}})}>
             <View style={styles.textContainer}>
                 <Text style={styles.quote}>{quote}</Text>
                 <Text style={styles.name}>{name}</Text>
@@ -11,7 +11,7 @@ const QuotesCard = ({img, quote, name}) => {
             <View style={styles.imgContainer}>
                 {img ? <Image source={{uri: img}} style={styles.img}/> : <View />}
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 

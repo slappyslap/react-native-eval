@@ -17,7 +17,7 @@ export default function App() {
                 <MaterialCommunityIcons name="view-list" color={color} size={size}/>
             ),
           }}/>
-          <Tabs.Screen name="findByName" component={FindByName} options={{
+          <Tabs.Screen name="findByName" component={FindByName} initialParams={{ search: "Homer" }} options={{
             tabBarLabel: "Recherche",
             tabBarIcon: ({color, size}) => (
                 <MaterialCommunityIcons name="heart" color={color} size={size}/>

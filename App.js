@@ -7,16 +7,16 @@ import QuotesCard from "./src/Components/QuotesCard";
 export default function App() {
 
   const [items, setItems] = useState([]);
-  const [number, setNumber] = useState(1);
+  const [name, setName] = useState("");
 
-  const load = (_number = 1) => {
+  const load = (_text) => {
     setItems([])
-    TheSimsonApi.getRandomQuotes(_number).then((data) => {
+    TheSimsonApi.getRandomQuotesByName(_text).then((data) => {
       setItems(data);
     })
   }
   useEffect(() => {
-   load();
+   load(name);
   }, [])
 
   return (
@@ -30,15 +30,14 @@ export default function App() {
       <SafeAreaView style={styles.btnContainer}>
         <TextInput
             style={styles.input}
-            onChangeText={(text) => {setNumber(text.replace(/[^0-9]/g, ''))}}
-            value={number.toString()}
-            keyboardType="numeric"
-            placeholder="Nombre"
+            onChangeText={(text) => {setName(text)}}
+            value={name}
+            placeholder="Nom"
             placeholderTextColor="#FFF"
         />
         <Button
-            onPress={() => {load(number)}}
-            title="Reload"
+            onPress={() => {load(name)}}
+            title="Recherche"
             style={styles.button}
         />
       </SafeAreaView>

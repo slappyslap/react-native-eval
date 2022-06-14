@@ -12,6 +12,15 @@ class TheSimsonApi {
                 })
             })
     }
+
+    getRandomQuotesByName(search = "") {
+        return fetch(`${this.baseUrl}?character=${search}&count=10`, {method: 'get'})
+            .then((result) => {
+                return result.json().then((data) => {
+                    return data
+                })
+            })
+    }
 }
 
 export default new TheSimsonApi();

@@ -23,7 +23,7 @@ export default function Alea({navigation}) {
                       keyExtractor={(item, index) => Math.random().toString() }
                       onEndReached={() => load(10)}
                       renderItem={({item, index}) => {
-                          return (<QuotesCard img={item.image} name={item.character} quote={item.quote} navigation={navigation}/>)
+                          return (<QuotesCard item={item} navigation={navigation}/>)
                       }}>
             </FlatList>
         </View>

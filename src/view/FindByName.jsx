@@ -35,7 +35,7 @@ export default function FindByName({navigation, route}) {
                               keyExtractor={(item, index) => Math.random().toString() }
                               onEndReached={() => load(name)}
                               renderItem={({item, index}) => {
-                                  return (<QuotesCard img={item.image} name={item.character} quote={item.quote} navigation={navigation}/>)
+                                  return (<QuotesCard item={item} navigation={navigation}/>)
                               }}>
                     </FlatList>
                     :

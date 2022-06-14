@@ -1,15 +1,53 @@
 import {Image, StyleSheet, Text, View, TouchableOpacity} from "react-native";
+import {useEffect, useState} from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 
-const QuotesCard = ({img, quote, name, navigation}) => {
+const QuotesCard = ({item, navigation, updateFunction}) => {
+    const [isFavorite, setIsFavorite] = useState(false);
+
+    useEffect(() => {
+        const jsonValue = AsyncStorage.getItem('@favList').then((data) => {
+            data = data ? JSON.parse(data) : [];
+
+            if (data.some(e => e.image === item.image && e.name === item.name && e.quote === item.quote)) {
+                setIsFavorite(true)
+            }
+        })
+    }, [])
+
+    const toggleFavorite = async (item) => {
+        const jsonValue = await AsyncStorage.getItem('@favList')
+        let array = jsonValue != null ? JSON.parse(jsonValue) : [];
+
+        if(array.some(e => e.image === item.image && e.name === item.name && e.quote === item.quote)) {
+            array = array.filter(e => {
+                return !(e.image === item.image && e.name === item.name && e.quote === item.quote);
+            })
+        } else {
+            array.push(item);
+        }
+
+        await AsyncStorage.setItem('@favList', JSON.stringify(array))
+        setIsFavorite(!isFavorite)
+
+        if(updateFunction){
+            updateFunction();
+        }
+    }
 
     return (
-        <TouchableOpacity style={styles.container} onPress={() => navigation.navigate({name: 'findByName', params: {search: name}})}>
+        <TouchableOpacity style={styles.container} onPress={() => navigation.navigate({name: 'findByName', params: {search: item.character}})}>
             <View style={styles.textContainer}>
-                <Text style={styles.quote}>{quote}</Text>
-                <Text style={styles.name}>{name}</Text>
+                <Text style={styles.quote}>{item.quote}</Text>
+                <Text style={styles.name}>{item.character}</Text>
+
+                <TouchableOpacity style={{flex: 4/12}} onPress={() => {toggleFavorite(item).then()}}>
+                    <MaterialCommunityIcons size={40} color={isFavorite ? "#F00" : "#000" } name="heart-outline"/>
+                </TouchableOpacity>
             </View>
             <View style={styles.imgContainer}>
-                {img ? <Image source={{uri: img}} style={styles.img}/> : <View />}
+                {item?.image ? <Image source={{uri: item.image}} style={styles.img}/> : <View />}
             </View>
         </TouchableOpacity>
     )

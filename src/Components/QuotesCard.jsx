@@ -9,7 +9,7 @@ const QuotesCard = ({img, quote, name}) => {
                 <Text style={styles.name}>{name}</Text>
             </View>
             <View style={styles.imgContainer}>
-                <Image source={{uri: img}} style={styles.img}/>
+                {img ? <Image source={{uri: img}} style={styles.img}/> : <View />}
             </View>
         </View>
     )
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         backgroundColor: '#FFF',
         color: "#000",
-        marginHorizontal: 20,
+        marginTop: 10,
         flexDirection: "row"
     },
     imgContainer: {
@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
         color: "#000",
     },
     name: {
+        paddingTop: 20,
         color: "#69acc3"
     }
 });
